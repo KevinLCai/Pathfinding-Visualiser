@@ -1,0 +1,133 @@
+.node {
+  width: 1.5em;
+  height: 1.5em;
+  outline: 2px solid white;
+  display: inline-block;
+  background-color: green;
+}
+
+.node-finish {
+  background-color: red;
+  background-image: url("finish.png") !important;
+  background-size: 100%;
+}
+
+.node-start {
+  background-color: green;
+  background-image: url("fire-emoji.png") !important;
+  background-size: 100%;
+}
+
+.node-visited {
+  animation-name: visitedAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes visitedAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: red;
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: orange;
+  }
+
+  75% {
+    transform: scale(1.1);
+    background-color: yellow;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgb(56, 56, 56);
+  }
+}
+
+.node-visited-weight {
+  background-color:pink;
+}
+
+.node-weight {
+  animation-name: weightAnimation;
+  background-color: white !important;
+}
+
+@keyframes weightAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: white;
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: white;
+  }
+
+  75% {
+    transform: scale(1.1);
+    background-color: white;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: white;
+  }
+}
+
+.node-wall {
+  background-color: black;
+  background-image: url(wall.jpeg);
+  background-size: 100%;
+}
+
+.node-shortest-path {
+  animation-name: shortestPath;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes shortestPath {
+  0% {
+    transform: scale(0.5);
+    background-color: grey;
+  }
+
+  50% {
+    transform: scale(1.1);
+    background-color: grey;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: grey;
+    background-image: url("yellow-brick.jpg");
+    background-size: 250%;
+  }
+}
+
+.node-wall {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+
+
+ 
