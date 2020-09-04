@@ -7,3 +7,4 @@ Throughout the creation of this project, I have learnt about graph theory and im
 
 I have learnt some of the basics of working with React, a framework I was previously unfamiliar with. In addition, I have increased my competancies in Javascript, while the majority of my programming experience is in using Python.
 
+Here is the link to the online GitHub Page: https://kevinlcai.github.io/Pathfinding-Visualiser/
