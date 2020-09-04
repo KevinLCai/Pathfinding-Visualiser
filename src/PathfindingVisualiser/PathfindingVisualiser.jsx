@@ -19,12 +19,6 @@ var holdingStart = false;
 var placingWeights = [];
 var visitedNodesInOrder, nodesInShortestPathOrder;
 
-// const N = 20;
-// const M = 50;
-// let current_row = -1;
-// let current_col = -1;
-// var workIsDone = false;
-
 // Initialise this into PathfindingVisualiser component
 export default class PathfindingVisualiser extends Component {
   constructor() {
@@ -51,7 +45,7 @@ export default class PathfindingVisualiser extends Component {
       this.setState({ grid: newGrid, mouseIsPressed: true });
     }
   }
-  // When the mouse is no longer pressed DO NOT FULLY UNDERSTAND
+  // When the mouse is pressed, we want to update the grid
   handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
     var newGrid = augmentGrid(this.state.grid, row, col);
@@ -64,7 +58,7 @@ export default class PathfindingVisualiser extends Component {
     holdingStart = false;
   }
 
-  // Takes in which nodes have been visited and shortest path, for each node, set the node to visited, if it is the 
+  // Takes in which nodes have been visited and shortest path, for each node, set the node to visited
   animateAlgorithm(visitedNodesInOrder, nodesInShortestPathOrder) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
@@ -81,29 +75,21 @@ export default class PathfindingVisualiser extends Component {
         else {
           document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited node-weight';
         }
-
-        // if (document.getElementById(`node-${node.row}-${node.col}`).className === 'node') {
-        //   document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited';
-        // }
-        // if (document.getElementById(`node-${node.row}-${node.col}`).className === 'node node-finish') {
-        //   document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited node-finish'
-        // }
-
-
-
-
       }, 10 * i);
     }
   }
 
   visualise(algorithm) {
+    //Prevents user from changing the map after animating an algorithm.
     if (!isAnimating) {
       isAnimating = true;
       const { grid } = this.state;
+      //- CHOSE NOT TO IMPLEMENT THIS FUNCTIONALITY AT THE MOMENT
       // clearBoard(grid);
       var startNode = grid[START_NODE_ROW][START_NODE_COL];
       var finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-      if (algorithm === 'dijkstra') {
+      //Identify which algorithm to run:
+      if (algorithm === 'Dijkstra') {
         visitedNodesInOrder = solveDijkstra(grid, startNode, finishNode);
         nodesInShortestPathOrder = getNodesInShortestPathOrderDijkstra(finishNode);
       } else if (algorithm === 'AStar') {
@@ -129,27 +115,17 @@ export default class PathfindingVisualiser extends Component {
           document.getElementById(`node-${node.row}-${node.col}`).className =
             'node node-shortest-path'
         }
-
-
-        // document.getElementById(`node-${node.row}-${node.col}`).className =
-        //   'node node-shortest-path';
-
-
-
-
       }, 20 * i);
     }
   }
 
+  // Allow functionality for adding weights to the map
   addWeights = (placingWeights) => {
     if (placingWeights.pop()) {
       placingWeights.push(false);
     } else {
       placingWeights.push(true);
     }
-
-    console.log(placingWeights);
-    console.log(placingWeights[0])
   }
 
   render() {
@@ -157,10 +133,10 @@ export default class PathfindingVisualiser extends Component {
     // HTML to render:
     return (
       <div>
-        {/* button  to trigger visualise function */}
+        {/* buttons  to trigger visualise function */}
         <div class="full-panel">
           <div class="panel">
-            <button onClick={() => this.visualise('dijkstra')} class="btn btn-primary"
+            <button onClick={() => this.visualise('Dijkstra')} class="btn btn-primary"
               title="Dijkstra's algorithm is a weighted search algorithm which guarantees the shortest path between two nodes. Press the 'Deforest' button to 
               remove parts of the forest (essentially adding weights to the search algorithm). Dijkstra's algorithm is a good visual representation of 
               a forest-fire especially since deforested nodes (weights) can slow down the spread of fire.">
@@ -204,8 +180,6 @@ export default class PathfindingVisualiser extends Component {
           </div>
         </div>
 
-
-
         {/* OVERLAY */}
         <div id="overlay">
           <div id="navigator">
@@ -223,8 +197,6 @@ export default class PathfindingVisualiser extends Component {
                 towards simulating the spread of fire within a forest. These algorithms have been applied to a 2 dimensional grid.
               </p>
             </div>
-
-
             <div>
               <h1>Different Nodes:</h1>
               <div>
@@ -252,7 +224,6 @@ export default class PathfindingVisualiser extends Component {
                 <p class="p-node">This is a <strong>Shortest-path Node</strong>, which maps out the shortest path between the Start Node and the Finish Node. Follow the yellow brick road! (Note: for Depth-first-search, this path is certainly not the shortest path!)</p>
               </div>
             </div>
-
             <div>
               <h1>Search algorithms:</h1>
               <ul>
@@ -269,17 +240,11 @@ export default class PathfindingVisualiser extends Component {
             Depth first search can be used to solve puzzles with only one solution, e.g. solve a maze.</li>
               </ul>
             </div>
-
-
           </div>
           <button onClick={() => overlayOff()} class="btn btn-default" id="overlay-button">
             Hide Window
             </button>
-
-
         </div>
-
-
 
         {/* Display grid of nodes */}
         <div className="grid">
@@ -291,20 +256,18 @@ export default class PathfindingVisualiser extends Component {
                   return (
                     <Node
                       key={nodeIdx}
+                      row={row}
                       col={col}
                       isFinish={isFinish}
                       isStart={isStart}
                       isWall={isWall}
                       isWeight={isWeight}
                       isVisited={isVisited}
-                      isVisitedWeight={isVisitedWeight}
                       mouseIsPressed={mouseIsPressed}
                       onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                      onMouseEnter={(row, col) =>
-                        this.handleMouseEnter(row, col)
-                      }
-                      onMouseUp={() => this.handleMouseUp()}
-                      row={row}></Node>
+                      onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
+                      onMouseUp={() => this.handleMouseUp()}>
+                    </Node>
                   );
                 })}
               </div>
@@ -338,32 +301,25 @@ const createNode = (col, row) => {
     isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
     distance: Infinity,
     isVisited: false,
-    // isVisited2: false,
     isWall: false,
-    // isShortest: false,
     previousNode: null,
     isWeight: false,
-    // src: 0,
   };
 };
 
 // newGrid is a copy of grid, changes the node and updates grid
 const augmentGrid = (grid, row, col) => {
-
+  //copy grid
   const newGrid = grid.slice();
   const node = newGrid[row][col];
   var newNode = newGrid[row][col];
   if (!node.isFinish && !node.isStart && !holdingFinish && !placingWeights[0] && !holdingStart && !holdingFinish) {
-    console.log("WALLS")
     newNode = {
       ...node,
       isWall: !node.isWall,
     }
   }
-
-  //CORRECTLY TOGGLES PLACING WEIGHTS
-  // CONDITIONAL WORKING, NOW WE NEED TO MAKE IT TURN NODE INTO WEIGHT
-
+  //  detect weights
   else if (placingWeights[0]) {
     console.log("WEIGHTS")
     newNode = {
@@ -371,13 +327,11 @@ const augmentGrid = (grid, row, col) => {
       isWeight: true,
     }
   }
-
   //MOVE FINISH NODE
   else if (newGrid[row][col].row === FINISH_NODE_ROW && newGrid[row][col].col === FINISH_NODE_COL) {
     holdingFinish = true;
   }
   else if (holdingFinish) {
-    console.log("FINISH")
     newNode = {
       ...node,
       isFinish: true,
@@ -385,6 +339,7 @@ const augmentGrid = (grid, row, col) => {
     FINISH_NODE_ROW = newGrid[row][col].row;
     FINISH_NODE_COL = newGrid[row][col].col;
 
+    // look through all the nodes, if a non-finish node is still displayed as finish - switch the boolean
     for (var i = 0; i < 20; i++) {
       for (var j = 0; j < 50; j++) {
         if (newGrid[i][j].isFinish) {
@@ -393,13 +348,11 @@ const augmentGrid = (grid, row, col) => {
       }
     }
   }
-
-  //MOVE START NODE
+  //MOVE START NODE - same logic as finish node
   else if (newGrid[row][col].isStart) {
     holdingStart = true;
   }
   else if (holdingStart) {
-    console.log("START")
     newNode = {
       ...node,
       isStart: true,
@@ -411,6 +364,7 @@ const augmentGrid = (grid, row, col) => {
       for (var l = 0; l < 50; l++) {
         if (newGrid[k][l].isStart) {
           document.getElementById(`node-${k}-${l}`).className = "node";
+          newGrid[k][l].isStart = false;
         }
       }
     }
@@ -426,6 +380,8 @@ function overlayOn() {
 function overlayOff() {
   document.getElementById("overlay").style.display = "none";
 }
+
+//Below are functions that may be implemented in the future!
 
 // //CLEAR BOARD WHEN NEW ALGO CALLED
 // function clearBoard(grid) {
@@ -466,73 +422,4 @@ function overlayOff() {
 //       }
 //     }
 //   }
-// }
-
-// function getCookieVal(offset) {
-//   var endstr = document.cookie.indexOf(";", offset);
-//   if (endstr == -1)
-//     endstr = document.cookie.length;
-//   return unescape(document.cookie.substring(offset, endstr));
-// }
-// function GetCookie(name) {
-//   var arg = name + "=";
-//   var alen = arg.length;
-//   var clen = document.cookie.length;
-//   var i = 0;
-//   while (i < clen) {
-//     var j = i + alen;
-//     if (document.cookie.substring(i, j) == arg)
-//       return getCookieVal(j);
-//     i = document.cookie.indexOf(" ", i) + 1;
-//     if (i == 0)
-//       break;
-//   }
-//   return null;
-// }
-// function SetCookie(name, value) {
-//   var argv = SetCookie.arguments;
-//   var argc = SetCookie.arguments.length;
-//   var expires = (2 < argc) ? argv[2] : null;
-//   var path = (3 < argc) ? argv[3] : null;
-//   var domain = (4 < argc) ? argv[4] : null;
-//   var secure = (5 < argc) ? argv[5] : false;
-//   document.cookie = name + "=" + escape(value) +
-//     ((expires == null) ? "" : ("; expires=" + expires.toGMTString())) +
-//     ((path == null) ? "" : ("; path=" + path)) +
-//     ((domain == null) ? "" : ("; domain=" + domain)) +
-//     ((secure == true) ? "; secure" : "");
-// }
-// function DisplayInfo() {
-//   var expdate = new Date();
-//   var visit;
-//   expdate.setTime(expdate.getTime() + (24 * 60 * 60 * 1000 * 365));
-//   if (!(visit = GetCookie("visit")))
-//     visit = 0;
-//   visit++;
-//   SetCookie("visit", visit, expdate, "/", null, false);
-//   var message;
-//   if (visit == 1)
-//     message = "         Welcome to my page!";
-//   if (visit == 2)
-//     message = "           I see you came back !";
-//   if (visit == 3)
-//     message = "               Oh, it's you again!";
-//   if (visit == 4)
-//     message = "            You must be curious!";
-//   if (visit == 5)
-//     message = "      You're practically a regular!";
-//   if (visit == 6)
-//     message = "              You need a hobby!";
-//   if (visit == 7)
-//     message = "             Nothing better to do?";
-//   if (visit == 8)
-//     message = "            Don't you ever sleep?";
-//   if (visit == 9)
-//     message = "                      Get a life!!!";
-//   if (visit >= 10)
-//     message = "  Rent is due on the 1st of the month!";
-//   alert("\n" + "Your browser has visited this page               \n"
-//     + "                              " + visit + "\n"
-//     + "                          time(s)." + "\n" + "\n"
-//     + message);
 // }

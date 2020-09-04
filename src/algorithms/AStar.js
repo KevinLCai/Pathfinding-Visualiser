@@ -6,18 +6,17 @@ var unvisitedNodes = [];
 export function astar(grid, startNode, finishNode) {
     unvisitedNodes = getAllNodes(grid);
     startNode.distance = 0;
-
+    //while there are still unvisited nodes:
     while (unvisitedNodes.length) {
         sortNodesByDistance(unvisitedNodes);
         const closestNode = unvisitedNodes.shift();
         closestNode.isVisited = true;
+        //If we encounter a wall - skip it
         if (closestNode.isWall) continue;
-
-        //ADD WEIGHTS
+        //Increase the distance of a node if it is a weight
         if (closestNode.isWeight) {
-            closestNode.distance = 75;
+            closestNode.distance = 150;
         }
-
         if (closestNode.distance === Infinity) return visitedNodesInOrder;
         // NEED TO CHANGE
         visitedNodesInOrder.push(closestNode);
@@ -27,6 +26,7 @@ export function astar(grid, startNode, finishNode) {
     return visitedNodesInOrder;
 }
 
+//Our heuristic is implemented by measuring distance of current node from the end node
 function getEuclidianDistance(x1, y1, x2, y2,) {
     var v1 = Math.pow(x1 - x2, 2);
     v1 = v1 ** 2;

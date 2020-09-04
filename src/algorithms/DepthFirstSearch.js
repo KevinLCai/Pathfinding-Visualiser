@@ -1,44 +1,35 @@
 var visitedNodesInOrder = [];
 var nodesInShortestPathOrder = [];
-var destinationRow, DestinationCol;
-var ok = 0;
-var type = 1;
+var destinationRow, destinationCol;
+var pathFound = false;
 
-function dfs(grid, row, col, par, d) {
+function dfs(grid, row, col, distance) {
     const node = grid[row][col];
     if (node.isWall) return;
     visitedNodesInOrder.push(node);
     node.isVisited = true;
-    node.previousNode = par;
-    node.distance = d;
-    if (row === destinationRow && col === DestinationCol) {
+    node.distance = distance;
+    if (row === destinationRow && col === destinationCol) {
         nodesInShortestPathOrder.push(node);
-        ok = 1;
+        pathFound = true;
         return;
     }
 
     const unvisitedNeighbours = getUnvisitedNeighbours(node, grid);
-    if (type === 0) shuffle(unvisitedNeighbours);
     for (const neighbour of unvisitedNeighbours) {
         if (neighbour.isVisited === false) {
-            dfs(grid, neighbour.row, neighbour.col, node, d + 1);
-            if (ok) {
+            dfs(grid, neighbour.row, neighbour.col, node, distance + 1);
+            if (pathFound) {
                 nodesInShortestPathOrder.push(node);
-                node.previousNode = par;
                 break;
             }
         }
     }
 }
 
-function shuffle(array) {
-    array.sort(() => Math.random() - 0.5);
-}
-
 function getUnvisitedNeighbours(node, grid) {
     const neighbours = [];
     const { row, col } = node;
-
     if (row > 0) neighbours.push(grid[row - 1][col]);
     if (row < grid.length - 1) neighbours.push(grid[row + 1][col]);
     if (col > 0) neighbours.push(grid[row][col - 1]);
@@ -49,11 +40,10 @@ function getUnvisitedNeighbours(node, grid) {
 export function solveDFS(grid, startNode, finishNode, t) {
     visitedNodesInOrder = [];
     nodesInShortestPathOrder = [];
-    ok = 0;
+    pathFound = false;
     destinationRow = finishNode.row;
-    DestinationCol = finishNode.col;
-    type = t;
-    dfs(grid, startNode.row, startNode.col, null, 0);
+    destinationCol = finishNode.col;
+    dfs(grid, startNode.row, startNode.col, 0);
     return visitedNodesInOrder;
 }
 

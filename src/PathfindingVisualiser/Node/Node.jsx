@@ -16,8 +16,6 @@ export default class Node extends Component {
       isWeight,
       isVisited,
       isVisitedWeight,
-      // isShortest,
-
     } = this.props;
     const addedClassName =
       (isVisited && isWeight) ? 'node-visited node-weight'
@@ -25,10 +23,8 @@ export default class Node extends Component {
           : isStart ? 'node-start'
             : isWall ? 'node-wall'
               : isWeight ? 'node-weight'
-                : isVisitedWeight ? 'node-visited-weight'
-                  : isVisited ? 'node-visited'
-
-                    : '';
+                : isVisited ? 'node-visited'
+                  : '';
 
     return (
       <div
